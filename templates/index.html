@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lipchat API Interface</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Gradient background */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container styling */
+        .container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Card styling */
+        .card {
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .card-body {
+            background: #fff;
+            color: #333;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Button styling */
+        .btn {
+            width: 100%;
+            margin-top: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* Spinner and error message styling */
+        .indicator, .error {
+            display: none;
+        }
+
+        .spinner-border {
+            margin-top: 10px;
+        }
+
+        .alert {
+            margin-top: 10px;
+        }
+
+        /* Form input styling */
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Header styling */
+        h2 {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center mb-4">Lipachat API Interface</h2>
+
+    <!-- Send Message Form -->
+    <div class="card">
+        <div class="card-header">Send Message</div>
+        <div class="card-body">
+            <form id="send-message-form">
+                <div class="form-group">
+                    <label for="to-message">To</label>
+                    <input type="text" class="form-control" id="to-message" placeholder="Enter recipient phone number">
+                </div>
+                <div class="form-group">
+                    <label for="from-message">From</label>
+                    <input type="text" class="form-control" id="from-message" placeholder="Enter sender phone number">
+                </div>
+                <div class="form-group">
+                    <label for="message-text">Message</label>
+                    <textarea class="form-control" id="message-text" rows="4" placeholder="Enter your message"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" id="send-message-btn">Send Message</button>
+                <div class="spinner-border text-primary indicator" id="message-indicator" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="alert alert-danger mt-3 error" id="message-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Send Media Form -->
+    <div class="card">
+        <div class="card-header">Send Media</div>
+        <div class="card-body">
+            <form id="send-media-form">
+                <div class="form-group">
+                    <label for="to-media">To</label>
+                    <input type="text" class="form-control" id="to-media" placeholder="Enter recipient phone number">
+                </div>
+                <div class="form-group">
+                    <label for="from-media">From</label>
+                    <input type="text" class="form-control" id="from-media" placeholder="Enter sender phone number">
+                </div>
+                <div class="form-group">
+                    <label for="media-type">Media Type</label>
+                    <input type="text" class="form-control" id="media-type" placeholder="e.g., image, video">
+                </div>
+                <div class="form-group">
+                    <label for="media-url">Media URL</label>
+                    <input type="text" class="form-control" id="media-url" placeholder="Enter media URL">
+                </div>
+                <div class="form-group">
+                    <label for="caption">Caption</label>
+                    <input type="text" class="form-control" id="caption" placeholder="Optional caption">
+                </div>
+                <button type="button" class="btn btn-success" id="send-media-btn">Send Media</button>
+                <div class="spinner-border text-success indicator" id="media-indicator" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="alert alert-danger mt-3 error" id="media-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Send Buttons Form -->
+    <div class="card">
+        <div class="card-header">Send Buttons</div>
+        <div class="card-body">
+            <form id="send-buttons-form">
+                <div class="form-group">
+                    <label for="to-buttons">To</label>
+                    <input type="text" class="form-control" id="to-buttons" placeholder="Enter recipient phone number">
+                </div>
+                <div class="form-group">
+                    <label for="from-buttons">From</label>
+                    <input type="text" class="form-control" id="from-buttons" placeholder="Enter sender phone number">
+                </div>
+                <button type="button" class="btn btn-warning" id="send-buttons-btn">Send Buttons</button>
+                <div class="spinner-border text-warning indicator" id="buttons-indicator" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="alert alert-danger mt-3 error" id="buttons-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Send Interactive List Form -->
+    <div class="card">
+        <div class="card-header">Send Interactive List</div>
+        <div class="card-body">
+            <form id="send-interactive-form">
+                <div class="form-group">
+                    <label for="to-interactive">To</label>
+                    <input type="text" class="form-control" id="to-interactive" placeholder="Enter recipient phone number">
+                </div>
+                <div class="form-group">
+                    <label for="from-interactive">From</label>
+                    <input type="text" class="form-control" id="from-interactive" placeholder="Enter sender phone number">
+                </div>
+                <button type="button" class="btn btn-info" id="send-interactive-btn">Send Interactive List</button>
+                <div class="spinner-border text-info indicator" id="interactive-indicator" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="alert alert-danger mt-3 error" id="interactive-error"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="static/script.js"></script>
+</body>
+</html>
