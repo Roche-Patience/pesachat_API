@@ -146,34 +146,9 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  // Send the POST request
-  fetch("/create_template", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-    .then(response => {
-      document.getElementById("create-template-indicator").style.display = "none";
-      if (!response.ok) {
-        return response.json().then(err => {
-         showError(errorId, "Error processing request");
-          document.getElementById("create-template-error").textContent = "Error: " + err.error;
-          document.getElementById("create-template-error").style.display = "block";
-        });
-      } else {
-        // Handle successful response
-         alert("Request successful!");
-        console.log("Template created successfully");
-        // You can add additional success handling here
-      }
-    })
-    .catch(error => {
-      document.getElementById("create-template-indicator").style.display = "none";
-      document.getElementById("create-template-error").textContent = "Error: " + error.message;
-      document.getElementById("create-template-error").style.display = "block";
-    });
+  sendRequest("/create_template", data, "create-template-indicator", "create-template-error");
+
+
 });
 
 
