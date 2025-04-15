@@ -8,16 +8,16 @@ headers = {
 }
 
 # Function to send a WhatsApp message
-def send_whatsapp_message(from_number, to, message):
+def send_whatsapp_message(to, message):
     # Strip any extra spaces from numbers
-    from_number = from_number.strip()
+
     to = to.strip()
 
     payload = {
         "message": message,
         "messageId": str(uuid.uuid4()),  # Generate a unique message ID
         "to": to,
-        "from": from_number  # Use sanitized sender number
+        "from": DEFAULT_SENDER  # Use sanitized sender number
     }
 
     try:

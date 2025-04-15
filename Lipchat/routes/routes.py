@@ -4,6 +4,7 @@ from Lipchat.services.SendingButtons import send_whatsapp_buttons
 from Lipchat.services.SendingInteractiveLists import send_interactive_list
 from Lipchat.services.SendingMedia import send_media_message
 from Lipchat.services.SendingMessages import send_whatsapp_message
+from Lipchat.services.CreateTemplete import create_lipachat_template
 
 lipchat = Blueprint("whatsapp", __name__)
 
@@ -20,11 +21,11 @@ def validate_request(data, required_fields):
 @lipchat.route("/send_message", methods=["POST"])
 def send_message():
     data = request.get_json()
-    validation_error = validate_request(data, ["to", "from", "message"])
+    validation_error = validate_request(data, ["to","message"])
     if validation_error:
         return jsonify(validation_error[0]), validation_error[1]
 
-    response = send_whatsapp_message(data["from"], data["to"], data["message"])
+    response = send_whatsapp_message(data["to"], data["message"])
     return jsonify(response)
 
 
@@ -68,3 +69,54 @@ def send_interactive():
 
     response = send_interactive_list(data["to"], data["from"])
     return jsonify(response)
+
+
+@lipchat.route("/create_template", methods=["POST"])
+def create_template():
+    data = request.get_json()
+
+    # Validate required fields from the view
+    required_keys = [
+        "templateName", "language", "category",
+        "headerFormat", "headerText", "headerExample",
+        "bodyText", "bodyExamples"
+    ]
+    missing_keys = [key for key in required_keys if key not in data]
+    if missing_keys:
+        return jsonify({"error": "Missing keys", "missing": missing_keys}), 400
+
+    # Build the header component from separate fields
+    header = {
+        "format": data["headerFormat"],
+        "text": data["headerText"],
+        "example": data["headerExample"]
+    }
+
+    # Build the body component: split the comma‑separated examples into a list
+    examples_list = [ex.strip() for ex in data["bodyExamples"].split(",") if ex.strip()]
+    body = {
+        "text": data["bodyText"],
+        "examples": examples_list
+    }
+
+    # Combine header and body into the "component" structure
+    components = {
+        "header": header,
+        "body": body
+    }
+
+    # For this example, we use the body examples as the examplePayload.
+    example_payload = examples_list
+
+    # Call the helper function with the assembled values
+    result = create_lipachat_template(
+        template_name=data["templateName"],
+        language=data["language"],
+        category=data["category"],
+        components=components,
+        example_payload=example_payload
+    )
+
+    return jsonify(result)
+
+

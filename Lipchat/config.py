@@ -5,4 +5,4 @@ LIPACHAT_MESSAGE_API_URL = "https://gateway.lipachat.com/api/v1/whatsapp/message
 LIPACHAT_MESSAGE_MEDIA_API_URL = "https://gateway.lipachat.com/api/v1/whatsapp/media"
 LIPACHAT_BUTTONS_API_URL = "https://gateway.lipachat.com/api/v1/whatsapp/interactive/buttons"
 LIPACHAT_LIST_API_URL = "https://gateway.lipachat.com/api/v1/whatsapp/interactive/list"
-
+LIPACHAT_TEMPLATE_MESSAGE_API_URL = "https://gateway.lipachat.com/api/v1/template/+254110090747"
